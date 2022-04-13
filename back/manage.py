@@ -61,7 +61,7 @@ def display():
     while True:
         socketio.sleep(1)
         result=process()
-        print("update chart data")
+        # print("update chart data")
         socketio.emit('updateChartData',
                       [
                           [1, 2, 3],
@@ -69,6 +69,10 @@ def display():
                           [
                               {
                                   "count": 12,
+                                  "flow": "srcip: dstip:"
+                              },
+                              {
+                                  "count": 19,
                                   "flow": "srcip: dstip:"
                               }
                           ]

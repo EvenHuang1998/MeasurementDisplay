@@ -22,30 +22,56 @@
                 <a-select-option value="heavy_hitter">heavy_hitter</a-select-option>
             </a-select>
             <br/>
-            <span class="inputSpan">eth type：</span>
-            <a-input v-model="select_dict.eth_type" placeholder="ethernet type" class="inputArgs" allow-clear />
-            <br/>
-            <span class="inputSpan">src ip：</span>
-            <a-input v-model="select_dict.src_ip" placeholder="source ip address" class="inputArgs" allow-clear />
-            <br/>
+            <div v-show="type_selected">
+                <span v-show="select_dict.task==='flow_size'">
+                    <span class="inputSpan">eth type：</span>
+                    <a-input v-model="select_dict.eth_type" placeholder="ethernet type" class="inputArgs" allow-clear />
+                    <br/>
+                </span>
+                
+                <span v-show="select_dict.task==='flow_size' || select_dict.task==='super_spreader'">
+                    <span class="inputSpan">src ip：</span>
+                    <a-input v-model="select_dict.src_ip" placeholder="source ip address" class="inputArgs" allow-clear />
+                    <br/>
+                </span>
+                
+                <span v-show="select_dict.task!=='super_spreader' && select_dict.task!=='heavy_hitter'">
+                    <span class="inputSpan">dst ip：</span>
+                    <a-input v-model="select_dict.dst_ip" placeholder="destination ip address" class="inputArgs" allow-clear />
+                    <br/>
+                </span>
+                
+                
+                <span v-show="select_dict.task==='flow_size'">
+                     <span class="inputSpan">protocol：</span>
+                    <a-input v-model="select_dict.ip_protocol" placeholder="ip protocol" class="inputArgs" allow-clear />
+                    <br/>
+                </span>
+               
+                
+                <span v-show="select_dict.task==='flow_size'">
+                    <span class="inputSpan">src port：</span>
+                    <a-input v-model="select_dict.src_port" placeholder="source port" class="inputArgs" allow-clear />
+                    <br/>
+                </span>
+                
+                <span v-show="select_dict.task==='flow_size'">
+                    <span class="inputSpan">dst port：</span>
+                    <a-input v-model="select_dict.dst_port" placeholder="destination port" class="inputArgs" allow-clear />
+                    <br/>
+                </span>
+                
+                <span v-show="select_dict.task==='flow_size'">
+                    <span class="inputSpan">tcp flags：</span>
+                    <a-input v-model="select_dict.tcp_flags" placeholder="tcp flags" class="inputArgs" allow-clear />
+                    <br/>
+                </span>
+                
+            </div>
             
-            <span class="inputSpan">dst ip：</span>
-            <a-input v-model="select_dict.dst_ip" placeholder="destination ip address" class="inputArgs" allow-clear />
-            <br/>
-            <span class="inputSpan">protocol：</span>
-            <a-input v-model="select_dict.ip_protocol" placeholder="ip protocol" class="inputArgs" allow-clear />
-            <br/>
-            <span class="inputSpan">src port：</span>
-            <a-input v-model="select_dict.src_port" placeholder="source port" class="inputArgs" allow-clear />
-            <br/>
-            <span class="inputSpan">dst port：</span>
-            <a-input v-model="select_dict.dst_port" placeholder="destination port" class="inputArgs" allow-clear />
-            <br/>
-            <span class="inputSpan">tcp flags：</span>
-            <a-input v-model="select_dict.tcp_flags" placeholder="tcp flags" class="inputArgs" allow-clear />
 
         <a-button type="primary" style="margin-top:10px;margin-bottom:10px" @click="submit_select" block>Submit</a-button>
-        <a-button type="primary" style="margin-top:10px;margin-bottom:10px" @click="submit_run_switch" block>Run Switch</a-button>
+        <a-button type="primary" style="margin-bottom:10px" @click="submit_run_switch" block>Run Switch</a-button>
     </div>
     <div class="showPrimitives">
         <a-table :columns="columns" :data-source="primitives" style="white-space: pre-line;" bordered>
@@ -89,7 +115,12 @@ export default {
         command_num:0,
         primitives:[],
         columns
-    };
+    }
+  },
+  computed:{
+      type_selected(){
+          return this.select_dict.task!=="select task type"
+      }
   },
   methods: {
         fresh_select(){
@@ -99,7 +130,6 @@ export default {
                     continue
                 }
                 this.select_dict[select_key]=""
-
             }
         },
         submit_select(){
@@ -125,7 +155,6 @@ export default {
             this.$store.commit("UPDATE_CHARTNAME",chart_name);
         },
         updatePrimitive(val){
-
             // console.log(val)
             this.command_num+=1;
             let command_number=this.command_num;
@@ -144,7 +173,7 @@ export default {
 
     .inputSpan{
         display:inline-block;
-        width:80px;
+        width:70px;
     }
 
     .inputArgs{

@@ -61,8 +61,18 @@ def display():
     while True:
         socketio.sleep(1)
         result=process()
-        socketio.emit('updateChartData',{'flow_count':result,
-                                         'flow_num':result})
+        print("update chart data")
+        socketio.emit('updateChartData',
+                      [
+                          [1, 2, 3],
+                          [4, 5, 6],
+                          [
+                              {
+                                  "count": 12,
+                                  "flow": "srcip: dstip:"
+                              }
+                          ]
+                      ])
 
 @socketio.on('connect')
 def handle_message():
@@ -114,11 +124,15 @@ def process_preset(val):
     
     socketio.emit('updatePrimitive', "backend data")
 
-@socketio.on("run-switch")
+@socketio.on("run_switch")
 def process_run_switch():
-    socketio.emit('updateChartName',[['chart1','chart2','chart3','char4'],
-                                     ['c9','c0'],
-                                     True])
+    # socketio.emit('updateChartName',[['chart1','chart2','chart3','char4'],
+    #                                  ['c9','c0'],
+    #                                  True])
+    socketio.emit('updateChartName', [['chart1', 'chart2', 'chart3', 'char4'],
+                                      ['c2','c9'],
+                                      True])
+
 
 @socketio.on('display')
 def measure_flow_coord():
@@ -128,4 +142,4 @@ def measure_flow_coord():
         thread_flowcoord=socketio.start_background_task(target=display)
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host="0.0.0.0", port=5000)
+    socketio.run(app, debug=True, host="127.0.0.1", port=10020)

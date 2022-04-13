@@ -1,6 +1,6 @@
 <template>
     <div class="displayResult">
-        <div class="displaySize">
+        <div class="displaySize" v-show="chart_name[0].length !== 0">
             <h1>Flow Size</h1>
             <a-row :gutter="16">
                 <a-col :span="8" v-for="(name,index) in chart_name[0]" :key="name">
@@ -11,15 +11,16 @@
                             :chartid="name"
                             :chartname="name"
                             :x_data="timestamp"
-                            :y_data="flow_count[index]"
+                            :y_data="flow_size[index]"
                         >
                         </line-chart>
                     </a-card>
                 </a-col>
             </a-row>
+            <hr/>
         </div>
-        <hr/>
-        <div class="displayNum">
+        
+        <div class="displayNum" v-show="chart_name[1].length !== 0">
             <h1>Flow Num</h1>
             <a-row :gutter="16">
                 <a-col :span="8" v-for="(name,index) in chart_name[1]" :key="name">
@@ -30,31 +31,19 @@
                             :chartid="name"
                             :chartname="name"
                             :x_data="timestamp"
-                            :y_data="flow_count[index]"
+                            :y_data="flow_num[index]"
                         >
                         </line-chart>
                     </a-card>
                 </a-col>
             </a-row>
+            <hr/>
         </div>
-        <hr/>
+        
         <div class="displayCord" v-show="chart_name[2]">
-            <h1>Flow Num</h1>
-            <a-row :gutter="16">
-                <a-col :span="8" v-for="(name,index) in chart_name[1]" :key="name">
-                    <a-card :bordered="true" :hoverable="true" style="width:400px;height:500px;">
-                        <line-chart 
-                            :testcount="testcount"
-                            classtype="subChart" 
-                            :chartid="name"
-                            :chartname="name"
-                            :x_data="timestamp"
-                            :y_data="flow_count[index]"
-                        >
-                        </line-chart>
-                    </a-card>
-                </a-col>
-            </a-row>
+            <h1>Flow Cordinate</h1>
+            <a-table :columns="columns" :data-source="sorted_flow_data" :pagination="false"  bordered>
+            </a-table>
         </div>
     </div>
     
@@ -101,7 +90,7 @@ export default {
         return{
             testcount:0,
             timestamp:"",
-            flow_count:[],
+            flow_size:[],
             flow_num:[],
             flow_cord:[],
             columns
@@ -120,10 +109,13 @@ export default {
     },
     sockets:{
         updateChartData:function(val){
+            console.log("update chart  data")
+            console.log(val)
             this.testcount=(this.testcount+1)%1000;
             this.timestamp=dayjs().format("MM月DD日 HH:mm:ss")
-            this.flow_count=val.flow_count;
-            this.flow_num=val.flow_num;
+            this.flow_size=val[0]
+            this.flow_num=val[1]
+            this.flow_cord=val[2]
         }
     }
 }

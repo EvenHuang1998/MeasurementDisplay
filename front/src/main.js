@@ -9,8 +9,8 @@ import store from './store'
 import VueSocketIO from "vue-socket.io"
 Vue.use(new VueSocketIO({
   debug: false,
-  // connection:"http://127.0.0.1:5000"
-  connection: "http://10.21.0.148:5000"
+  connection:"http://127.0.0.1:10020"
+  // connection: "http://10.21.0.148:5000"
 }))
 
 //引入echarts

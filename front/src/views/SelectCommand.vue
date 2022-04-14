@@ -1,6 +1,7 @@
 <template>
 <div>
-    <div class="selectCommand">
+    <a-spin :spinning="spinning_status" :tip="spinning_tip">
+        <div class="selectCommand">
         <p>选择命令参数</p>
             <span class="inputSpan">task：</span>
             <a-select v-model="select_dict.task" class="inputArgs" showArrow>
@@ -66,7 +67,25 @@
                     <a-input v-model="select_dict.tcp_flags" placeholder="tcp flags" class="inputArgs" allow-clear />
                     <br/>
                 </span>
-                
+
+                <span v-show="select_dict.task==='flow_size'">
+                    <span class="inputSpan">tcp flags：</span>
+                    <a-input v-model="select_dict.tcp_flags" placeholder="tcp flags" class="inputArgs" allow-clear />
+                    <br/>
+                </span>
+
+                <span>
+                    <span class="inputSpan">window：</span>
+                    <a-input v-model="select_dict.window" placeholder="window" class="inputArgs" allow-clear />
+                    <br/>
+                </span>
+                    <span class="inputSpan">duration：</span>
+                    <a-input v-model="select_dict.duration" placeholder="duration" class="inputArgs" allow-clear />
+                    <br/>
+                <span>
+
+                </span>
+
             </div>
             
 
@@ -77,10 +96,13 @@
         <a-table :columns="columns" :data-source="primitives" style="white-space: pre-line;" bordered>
         </a-table>
     </div>
+    </a-spin>
+    
 </div>
 </template>
 
 <script>
+import { notification } from 'ant-design-vue';
 
 const columns = [
   {
@@ -109,9 +131,12 @@ export default {
             protocol:"",
             src_port:"",
             dst_port:"",
-            tcp_flags:""
+            tcp_flags:"",
+            window:"",
+            duration:""
         },
-
+        spinning_status:false,
+        spinning_tip:"",
         command_num:0,
         primitives:[],
         columns
@@ -123,6 +148,37 @@ export default {
       }
   },
   methods: {
+        sleep(ms){
+            setTimeout(()=>{
+                this.spinning_status=false
+                this.spinning_tip=""
+            },ms)
+        },
+        sleep_run(ms){
+            setTimeout(()=>{
+                this.spinning_status=false
+                this.spinning_tip=""
+                this.openNotificationWithIcon("success")
+            },ms)
+            
+        },
+        openNotification(){
+            notification.open({
+                    message: '提交运行成功！',
+                    description:'P4代码已部署到交换机，监控程序启动，请到Display页面查看结果！',
+                onClick: () => {
+                    console.log('Notification Clicked!');
+                },
+            })
+        },
+        openNotificationWithIcon(type){
+            notification[type]({
+            message: '提交运行成功！',
+            description:
+            'P4代码已部署到交换机，监控程序启动，请到Display页面查看结果！',
+        });
+        },
+
         fresh_select(){
             for( const select_key of Object.keys(this.select_dict)){
                 if(select_key==="task"){
@@ -140,12 +196,19 @@ export default {
                 }
             }
 
-            console.log(JSON.stringify(input_data))
+            // console.log(JSON.stringify(input_data))
             this.$socket.emit("pre-set",JSON.stringify(input_data))
+            this.spinning_status=true
+            this.spinning_tip="Compiling..."
             // this.fresh_select()
+            this.sleep(30000)
         },
         submit_run_switch(){
             this.$socket.emit("run_switch")
+            this.spinning_status=true
+            this.spinning_tip="Applying..."
+            this.sleep_run(10000)
+            
         }
         
   },
@@ -155,7 +218,6 @@ export default {
             this.$store.commit("UPDATE_CHARTNAME",chart_name);
         },
         updatePrimitive(val){
-            // console.log(val)
             this.command_num+=1;
             let command_number=this.command_num;
   
@@ -164,13 +226,17 @@ export default {
                 num:command_number,
                 primitive:val
             })
+        },
+        finishCompile(){
+            console.log("前端收到finish Compile")
+            this.spinning_status=false
+            this.spinning_tip=""
         }
   }
 };
 </script>
 
 <style>
-
     .inputSpan{
         display:inline-block;
         width:70px;

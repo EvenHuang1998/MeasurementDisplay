@@ -109,8 +109,8 @@ export default {
     },
     sockets:{
         updateChartData:function(val){
-            console.log("update chart  data")
-            console.log(val)
+            // console.log("update chart  data")
+            // console.log(val)
             this.testcount=(this.testcount+1)%1000;
             this.timestamp=dayjs().format("MM月DD日 HH:mm:ss")
             this.flow_size=val[0]

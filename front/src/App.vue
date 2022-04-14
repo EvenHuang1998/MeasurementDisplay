@@ -38,7 +38,8 @@
 
          <a-menu-item key="resources">
           <a-icon type="line-chart" />
-          <router-link to="/resources" style="display:inline-block">Resources</router-link>
+          <!-- <router-link to="/resources" style="display:inline-block">Resources</router-link> -->
+          <a href="http://10.21.0.148:3000" style="display:inline-block" target="_blank">Resources</a>
         </a-menu-item>
         <a-menu-item key="displayResult"  @click="click_display">
           <a-icon type="line-chart" />

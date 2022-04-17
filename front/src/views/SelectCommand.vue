@@ -4,7 +4,7 @@
         <div class="selectCommand">
         <p>选择命令参数</p>
             <span class="inputSpan">task：</span>
-            <a-select v-model="select_dict.task" class="inputArgs" showArrow>
+            <a-select v-model="select_dict.task" class="inputSelect" showArrow>
                 <a-select-option value="flow_size">flow_size</a-select-option>
                 <a-select-option value="SYN_flood">SYN_flood</a-select-option>
                 <a-select-option value="ACK_flood">ACK_flood</a-select-option>
@@ -26,65 +26,67 @@
             <div v-show="type_selected">
                 <span v-show="select_dict.task==='flow_size'">
                     <span class="inputSpan">eth type：</span>
-                    <a-input v-model="select_dict.eth_type" placeholder="ethernet type" class="inputArgs" allow-clear />
+                    <a-input v-model="select_dict.eth_type" placeholder="ethernet type" style="display:inline-block;width:600px;margin-right:5px;margin-bottom:5px;" allow-clear />
                     <br/>
                 </span>
                 
                 <span v-show="select_dict.task==='flow_size' || select_dict.task==='super_spreader'">
                     <span class="inputSpan">src ip：</span>
-                    <a-input v-model="select_dict.src_ip" placeholder="source ip address" class="inputArgs" allow-clear />
+                    <a-input v-model="select_dict.src_ip" placeholder="source ip address" class="inputArgs"  style="display: inline-block;width:600px;margin-right:5px;margin-bottom:5px;" allow-clear />
                     <br/>
                 </span>
                 
-                <span v-show="select_dict.task!=='super_spreader' && select_dict.task!=='heavy_hitter'">
+                <span v-show="select_dict.task!=='super_spreader' && select_dict.task!=='heavy_hitter' &select_dict.task!=='Select task type'">
                     <span class="inputSpan">dst ip：</span>
-                    <a-input v-model="select_dict.dst_ip" placeholder="destination ip address" class="inputArgs" allow-clear />
+                    <a-input v-model="select_dict.dst_ip" placeholder="destination ip address" class="inputArgs" style="display: inline-block;width:600px;margin-right:5px;margin-bottom:5px;" allow-clear />
                     <br/>
                 </span>
                 
                 
                 <span v-show="select_dict.task==='flow_size'">
                      <span class="inputSpan">protocol：</span>
-                    <a-input v-model="select_dict.ip_protocol" placeholder="ip protocol" class="inputArgs" allow-clear />
+                    <a-input v-model="select_dict.ip_protocol" placeholder="ip protocol" class="inputArgs"  style="display: inline-block;width:600px;margin-right:5px;margin-bottom:5px;" allow-clear />
                     <br/>
                 </span>
                
                 
                 <span v-show="select_dict.task==='flow_size'">
                     <span class="inputSpan">src port：</span>
-                    <a-input v-model="select_dict.src_port" placeholder="source port" class="inputArgs" allow-clear />
+                    <a-input v-model="select_dict.src_port" placeholder="source port" class="inputArgs"  style="display: inline-block;width:600px;margin-right:5px;margin-bottom:5px;" allow-clear />
                     <br/>
                 </span>
                 
                 <span v-show="select_dict.task==='flow_size'">
                     <span class="inputSpan">dst port：</span>
-                    <a-input v-model="select_dict.dst_port" placeholder="destination port" class="inputArgs" allow-clear />
+                    <a-input v-model="select_dict.dst_port" placeholder="destination port" class="inputArgs"  style="display: inline-block;width:600px;margin-right:5px;margin-bottom:5px;" allow-clear />
                     <br/>
                 </span>
                 
                 <span v-show="select_dict.task==='flow_size'">
                     <span class="inputSpan">tcp flags：</span>
-                    <a-input v-model="select_dict.tcp_flags" placeholder="tcp flags" class="inputArgs" allow-clear />
+                    <a-input v-model="select_dict.tcp_flags" placeholder="tcp flags" class="inputArgs"  style="display: inline-block;width:600px;margin-right:5px;margin-bottom:5px;" allow-clear />
                     <br/>
                 </span>
 
                 <span v-show="select_dict.task==='flow_size'">
                     <span class="inputSpan">tcp flags：</span>
-                    <a-input v-model="select_dict.tcp_flags" placeholder="tcp flags" class="inputArgs" allow-clear />
+                    <a-input v-model="select_dict.tcp_flags" placeholder="tcp flags" class="inputArgs"  style="display: inline-block;width:600px;margin-right:5px;margin-bottom:5px;" allow-clear />
                     <br/>
                 </span>
 
-                <span>
-                    <span class="inputSpan">window：</span>
-                    <a-input v-model="select_dict.window" placeholder="window" class="inputArgs" allow-clear />
+                <span v-show="select_dict.task!=='Select task type'">
+                    <span class="inputSpan" >window：</span>
+                    <a-input v-model="select_dict.window" placeholder="window" class="inputArgs"  style="display: inline-block;width:600px;margin-right:5px;margin-bottom:5px;" allow-clear />
                     <br/>
-                </span>
+                </span >
+
+                <span v-show="select_dict.task!=='Select task type'">
                     <span class="inputSpan">duration：</span>
-                    <a-input v-model="select_dict.duration" placeholder="duration" class="inputArgs" allow-clear />
+                    <a-input v-model="select_dict.duration" placeholder="duration" class="inputArgs"  style="display: inline-block;width:600px;margin-right:5px;margin-bottom:5px;" allow-clear />
                     <br/>
-                <span>
-
                 </span>
+
+                
 
             </div>
             
@@ -187,6 +189,7 @@ export default {
                 }
                 this.select_dict[select_key]=""
             }
+
         },
         submit_select(){
             let input_data={}
@@ -200,21 +203,19 @@ export default {
             this.$socket.emit("pre-set",JSON.stringify(input_data))
             this.spinning_status=true
             this.spinning_tip="Compiling..."
-            // this.fresh_select()
+            this.fresh_select()
             this.sleep(30000)
         },
         submit_run_switch(){
             this.$socket.emit("run_switch")
             this.spinning_status=true
             this.spinning_tip="Applying..."
-            this.sleep_run(10000)
+            this.sleep_run(15000)
             
         }
-        
   },
   sockets:{
         updateChartName(chart_name){
-            console.log(chart_name)
             this.$store.commit("UPDATE_CHARTNAME",chart_name);
         },
         updatePrimitive(val){
@@ -231,6 +232,9 @@ export default {
             console.log("前端收到finish Compile")
             this.spinning_status=false
             this.spinning_tip=""
+        },
+        p4_compile_done(){
+            console.log('compile done');
         }
   }
 };
@@ -242,9 +246,11 @@ export default {
         width:70px;
     }
 
-    .inputArgs{
+
+    .inputSelect{
         margin-right:5px;
         margin-bottom:5px;
-        width:calc(100% - 100px);
+        width:600px;
     }
+
 </style>

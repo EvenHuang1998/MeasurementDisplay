@@ -13,6 +13,11 @@ export default new Router({
   mode:"history",
   routes: [
     {
+      path: "/",
+      name: "SelectCommand",
+      component: SelectCommand
+    },
+    {
       path: '/input-command',
       name: 'InputCommand',
       component:InputCommand

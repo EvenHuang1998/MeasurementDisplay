@@ -13,9 +13,9 @@ const actions = {
 
 const mutations = {
     UPDATE_CHARTNAME(state, value) {
-        console.log("触发了mutation修改chartname")
+        // console.log("触发了mutation修改chartname")
         state.chart_name = value
-        console.log(state.chart_name)
+        // console.log(state.chart_name)
     }
 }
 

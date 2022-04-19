@@ -6,45 +6,29 @@
         theme="dark"
         mode="inline"
         :style="{ position: 'sticky', top: '10px' }"
+        :defaultSelectedKeys="['homepage']"
       >
+        <a-menu-item key="homepage">
+          <a-icon type="home" />
+          <router-link to="/frontend" style="display:inline-block">首页</router-link>
+        </a-menu-item>
         <a-sub-menu key="command">
-          <span slot="title"> <a-icon type="edit" /><span>Command</span> </span>
+          <span slot="title"> <a-icon type="edit" /><span>输入任务</span> </span>
           <a-menu-item key="select-command">
-            <router-link to="/select-command">Select Command</router-link>
+            <router-link to="/select-command">选择测量任务</router-link>
           </a-menu-item>
           <a-menu-item key="input-command">
-            <router-link to="/input-command">Input Command</router-link>
+            <router-link to="/input-command">编写测量任务</router-link>
           </a-menu-item>
         </a-sub-menu>
-
-        <!-- <a-sub-menu key="measurement">
-          <span slot="title">
-            <a-icon type="line-chart" /><span>Measurement</span>
-          </span>
-          <a-menu-item key="flowSize" @click="click_flow_size">
-            <router-link to="/flow-size">Flow Size</router-link>
-          </a-menu-item>
-          <a-menu-item key="flowCount" @click="click_flow_count">
-            <router-link to="/flow-count">Flow Count</router-link>
-          </a-menu-item>
-          <a-menu-item key="flowCoord" @click="click_flow_coord">
-            <router-link to="/flow-coord">Flow Coordinate</router-link>
-          </a-menu-item>
-        </a-sub-menu> -->
-
-        <!-- <a-menu-item key="resources">
-          <router-link to="/resources">Resources</router-link>
-        </a-menu-item> -->
-
-         
         <a-menu-item key="displayResult"  @click="click_display">
           <a-icon type="line-chart" />
-          <router-link to="/display-result" style="display:inline-block">Display</router-link>
+          <router-link to="/display-result" style="display:inline-block">结果展示</router-link>
         </a-menu-item>
         <a-menu-item key="resources">
           <a-icon type="pie-chart" />
-          <!-- <router-link to="/resources" style="display:inline-block">Resources</router-link> -->
-          <a href="http://10.21.0.148:3000" style="display:inline-block" target="_blank">Resources</a>
+          <router-link to="/resources" style="display:inline-block">资源占用</router-link>
+          <!-- <a href="http://10.21.0.148:3000" style="display:inline-block" target="_blank">Resources</a> -->
         </a-menu-item>
       </a-menu>
     </a-layout-sider>

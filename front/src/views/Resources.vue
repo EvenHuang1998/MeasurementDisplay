@@ -1,6 +1,5 @@
 <template>
-    <iframe src="http://10.21.0.148:3000/client/"></iframe>
-    <!-- <iframe width="100%" height="1000px" src="https://www.bilibili.com"></iframe> -->
+    <iframe src="http://10.21.0.148/client" sandbox="allow-forms allow-scripts allow-same-origin allow-popups" width="100%" height="1200px"></iframe>
 </template>
 
 <script>

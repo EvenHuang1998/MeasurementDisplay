@@ -11,6 +11,11 @@ export default new Router({
   mode:"history",
   routes: [
     {
+      path: "/",
+      name: "homepage",
+      component: ShowGrafana
+    },
+    {
       path: "/frontend",
       name: "ShowGrafana",
       component: ShowGrafana

@@ -85,9 +85,6 @@
                     <a-input v-model="select_dict.duration" placeholder="duration" class="inputArgs"  style="display: inline-block;width:600px;margin-right:5px;margin-bottom:5px;" allow-clear />
                     <br/>
                 </span>
-
-                
-
             </div>
             
 

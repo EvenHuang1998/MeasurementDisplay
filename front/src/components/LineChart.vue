@@ -17,10 +17,53 @@ export default{
                 yAxis: {
                     type: 'value'
                 },
+                legend:{
+                    data:["total"],
+                    orient: 'vertical',
+                    x: 'left',
+                    y: 'top'
+                },
                 series: [
                     {
+                        name: 'total',
                         data: [],
-                        type: 'line'
+                        type: 'line',
+                        smooth: true
+                    },
+                    {
+                        name: 'heavy_hitter',
+                        data: [],
+                        type: 'line',
+                        smooth: true
+                    }
+                ]
+            },
+            total_option:{
+                xAxis: {
+                    type: 'category',
+                    data: []
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                legend:{
+                    data:["total", 'heavy_hitter'],
+                    orient: 'vertical',
+                    x: 'left',
+                    y: 'top'
+                },
+                series: [
+                    {
+                        name: 'total',
+                        data: [],
+                        type: 'line',
+                        smooth: true
+                    },
+                    {
+                        name: 'heavy_hitter',
+                        data: [],
+                        type: 'line',
+                        smooth: true
                     }
                 ]
             }
@@ -44,6 +87,9 @@ export default{
         },
         y_data:{
             type:Number
+        },
+        heavy_hitter_data:{
+            type: Number
         }
     },
     methods:{
@@ -51,11 +97,20 @@ export default{
             this.chart.setOption(this.option)
         },
         updateOption(){
-            if(this.option.series[0].data.length==15){
+            if(this.option.series[0].data.length==50){
                 this.option.series[0].data.shift();
+                if(this.chartname==='all_flow_lemon'){
+                    this.option.series[1].data.shift();
+                }
                 this.option.xAxis.data.shift();
             }
             this.option.series[0].data.push(this.y_data);
+            if(this.chartname==='all_flow_lemon'){
+                this.option.series[1].data.push(this.heavy_hitter_data);
+                if(!this.option.legend.data.includes('heavy_hitter')){
+                    this.option.legend.data.push('heavy_hitter');
+                }
+            }
             this.option.xAxis.data.push(this.x_data);
         }
     },
@@ -74,15 +129,18 @@ export default{
     },
     mounted() {
         this.chart=this.$echarts.init(document.getElementById(this.chartid));
-        this.chart.setOption(
+        if(this.chartname === 'all_flow_lemon'){
+            this.chart.setOption(
             {
                 title:{
                     left:"center",
                     text:this.chartname
                 },
                 legend:{
-                    show:false,
-                    data:[this.chartname],
+                    data:['total', 'heavy_hitter'],
+                    orient: 'vertical',
+                    x: 'left',
+                    y: 'top'
                 },
                 xAxis:{
                     data:[],
@@ -99,35 +157,93 @@ export default{
                 },
                 series:[
                     {
-                        name:this.chartname,
+                        name:"total",
                         type:"line",
                         data:[],
-                        label:{
-                            show:true,
-                            position:"top",
-                            rotate:45,
-                            textStyle:{
-                                fontSize:10
-                            }
-                        }
+                        // label:{
+                        //     show:true,
+                        //     position:"top",
+                        //     rotate:45,
+                        //     textStyle:{
+                        //         fontSize:10
+                        //     }
+                        // },
+                        smooth: true
+                    },
+                    {
+                        name:'heavy_hitter',
+                        type:"line",
+                        data:[],
+                        smooth: true
+                        // label:{
+                        //     show:true,
+                        //     position:"top",
+                        //     rotate:45,
+                        //     textStyle:{
+                        //         fontSize:10
+                        //     }
+                        // }
                     }
                 ]
-
             }
         )
+        }else{
+            this.chart.setOption(
+            {
+                title:{
+                    left:"center",
+                    text:this.chartname
+                },
+                legend:{
+                    data:['total'],
+                    orient: 'vertical',
+                    x: 'left',
+                    y: 'top'
+                },
+                xAxis:{
+                    data:[],
+                    axisLabel:{
+                        rotate:45,
+                        interval:0
+                    }
+                },
+                grid:{
+                    bottom:"30%"
+                },
+                yAxis:{
+                    type:"value"
+                },
+                series:[
+                    {
+                        name:"total",
+                        type:"line",
+                        data:[],
+                        smooth: true
+                        // label:{
+                        //     show:true,
+                        //     position:"top",
+                        //     rotate:45,
+                        //     textStyle:{
+                        //         fontSize:10
+                        //     }
+                        // }
+                    }
+                ]
+            }
+        )
+        }
+        
     }
-
 }
-    
 
 </script>
 
 <style>
 
 .subChart{
-    width: 400px;
-    height:500px;
-    display: inline-block;
+    width: 90%;
+    height: 550px;
+    /* display: inline-block; */
 }
 
 .mainChart{

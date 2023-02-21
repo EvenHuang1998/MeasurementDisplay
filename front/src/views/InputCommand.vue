@@ -11,15 +11,15 @@
       />
       <a-card>
           <p>
-            from my_lang.primitives import *
+            from lemon_lang.primitives import *
 
             #1、测量指定IP对之间的数控包个数
             m1 = Match('match1', "ipv4.src_addr == 10.22.0.200 && ipv4.dst_addr == 10.22.0.201")
-            a1 = Count('flow_count', "lambda(): { packet_counter = packet_counter + 1 }")
+            a1 = Count('packet_counter', "lambda(): { packet_counter = packet_counter + 1 }")
 
             #2、测量tcp数据包个数
             m2 = Match('match2', "ipv4.protocol == 0x06")
-            a2 = Count('tcp_count', "lambda(): { tcp_counter = tcp_counter + 1 }")
+            a2 = Count('tcp_counter', "lambda(): { tcp_counter = tcp_counter + 1 }")
 
             #3、测量指定目的IP建立tcp连接数
             m3 = Match('match3', "ipv4.dst_addr == 10.22.0.201")
@@ -27,7 +27,7 @@
 
             #4、测量top16最大流
             m4 = Match('match4', "ipv4.protocol == 0x06")
-            a4 = Sketch('top_flow', "hash_key: { ipv4.src_addr, tcp.dst_port }","TOP16",10000)
+            a4 = Sketch('top_flow', "hash_key: { ipv4.src_addr, ipv4.dst_addr }","TOP16-shadow",10000)
             # ...
 
             measurement = (m1 >> a1) + (m2 >> a2) + (m3 >> a3) + (m4 >> a4)

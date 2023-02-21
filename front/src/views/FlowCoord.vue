@@ -68,7 +68,25 @@ export default {
         updateFlowCoord(val){
             console.log(this.flow_data)
             this.flow_data=val.rank;
+        },
+        updateFlowCount:function(val){
+            console.log('val!!!', val)
+            this.testcount=(this.testcount+1)%1000;
+            // this.timestamp=new Date().toString().slice(16,24);
+            this.timestamp=dayjs().format("MM月DD日 HH:mm:ss")
+            this.total_flow_count = val.flow_count[0];
+            this.flow_count=val.flow_count.slice(1);
+            // this.chart_name=val.chart_name;
         }
+        // updateFlowCount:function(val){
+        //     // console.log(val)
+        //     this.testcount=(this.testcount+1)%1000;
+        //     // this.timestamp=new Date().toString().slice(16,24);
+        //     this.timestamp=dayjs().format("MM月DD日 HH:mm:ss")
+        //     this.total_flow_count = val.flow_count[0];
+        //     this.flow_count=val.flow_count.slice(1);
+        //     // this.chart_name=val.chart_name;
+        // }
     }
 };
 </script>

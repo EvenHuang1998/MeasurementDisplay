@@ -20,7 +20,8 @@
     <hr>
     <div class="grafana">
       <h2>历史结果展示</h2>
-      <iframe src="http://10.21.0.148:3001/d/zmLWLZwnz/home_page?orgId=1&from=1650349855285&to=1650371455285&theme=light&kiosk" width="100%" height="700px"></iframe>
+      <!-- <iframe src="http://101.42.234.174:3001/d/zmLWLZwnz/home_page?orgId=1&from=1650349855285&to=1650371455285&theme=light&kiosk" width="100%" height="700px"></iframe> -->
+      <iframe src="http://101.42.234.174:8088/d/zmLWLZwnz/home_page?orgId=1&from=1650349855285&to=1650371455285&theme=light&kiosk" width="100%" height="700px"></iframe>
     </div>
     
   </div>
@@ -33,7 +34,6 @@ export default {
 </script>
 
 <style>
-
   .grafana{
     margin-top: 20px;
     width: 100%;

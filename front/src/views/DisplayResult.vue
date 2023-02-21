@@ -2,29 +2,43 @@
     <div class="displayResult">
         <div class="displaySize" v-show="chart_name[0].length !== 0">
             <h1>Flow Size</h1>
-            <a-row :gutter="16">
+            <!-- <a-row :gutter="16">
                 <a-col :span="8" v-for="(name,index) in chart_name[0]" :key="name">
-                    <a-card :bordered="true" :hoverable="true" style="width:400px;height:500px;">
-                        <line-chart 
+                    <a-card :bordered="true" :hoverable="true">  -->
+                        <!-- style="width:400px;height:500px;"> -->
+                        <!-- <line-chart 
                             :testcount="testcount"
                             classtype="subChart" 
                             :chartid="name"
                             :chartname="name"
                             :x_data="timestamp"
                             :y_data="flow_size[index]"
+                            :heavy_hitter_data="flow_coord_sum"
                         >
                         </line-chart>
                     </a-card>
                 </a-col>
-            </a-row>
+            </a-row> -->
+                <a-card :bordered="true" :hoverable="true" v-for="(name,index) in chart_name[0]" :key="name" style="margin: 0 auto;">
+                    <line-chart 
+                        :testcount="testcount"
+                        classtype="subChart" 
+                        :chartid="name"
+                        :chartname="name"
+                        :x_data="timestamp"
+                        :y_data="flow_size[index]"
+                        :heavy_hitter_data="flow_coord_sum"
+                    />
+                </a-card>
             <hr/>
         </div>
         
         <div class="displayNum" v-show="chart_name[1].length !== 0">
             <h1>Flow Num</h1>
             <a-row :gutter="16">
-                <a-col :span="8" v-for="(name,index) in chart_name[1]" :key="name">
-                    <a-card :bordered="true" :hoverable="true" style="width:400px;height:500px;">
+                <a-col :span="24" v-for="(name,index) in chart_name[1]" :key="name">
+                    <a-card :bordered="true" :hoverable="true">
+                        <!-- style="width:400px;height:500px;"> -->
                         <line-chart 
                             :testcount="testcount"
                             classtype="subChart" 
@@ -75,6 +89,8 @@ const columns = [
   },
 ];
 
+const BASIC_FLOW_COORD_SIZE = 10000;
+
 function compare(attr){
     return function(flow1,flow2){
         let count1=flow1[attr];
@@ -90,9 +106,9 @@ export default {
         return{
             testcount:0,
             timestamp:"",
-            flow_size:[],
             flow_num:[],
             flow_cord:[],
+            total_count: 0,
             columns
         }
     },
@@ -105,14 +121,22 @@ export default {
                 item["key"]=index.toString();
             })
             return sorted
+        },
+        flow_coord_sum(){
+            return this.flow_cord.reduce((prev,curr)=>{
+                    if(curr['count'] > 0){
+                        return prev+curr['count']+BASIC_FLOW_COORD_SIZE;
+                    }else{
+                        return prev;
+                    }
+            }, 0);
         }
     },
     sockets:{
         updateChartData:function(val){
-            // console.log("update chart  data")
-            // console.log(val)
+            // console.log('val!!!!!', this.flow_coord_sum);
             this.testcount=(this.testcount+1)%1000;
-            this.timestamp=dayjs().format("MM月DD日 HH:mm:ss")
+            this.timestamp=dayjs().format("HH:mm:ss")
             this.flow_size=val[0]
             this.flow_num=val[1]
             this.flow_cord=val[2]

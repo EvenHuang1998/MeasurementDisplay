@@ -27,8 +27,8 @@
         </a-menu-item>
         <a-menu-item key="resources">
           <a-icon type="pie-chart" />
-          <!-- <a href="http://101.42.234.174:9998" style="display:inline;">资源占用</a> -->
-          <a href="http://101.42.234.174:8080" style="display:inline;">资源占用</a>
+          <!-- <a href="http://10.21.0.148:3002" style="display:inline;">资源占用</a> -->
+          <a href="http://101.42.234.174:8089" style="display:inline;" target="_blank">资源占用</a>
           <!-- <router-link to="http://101.42.234.174:9998" style="display:inline-block">资源占用</router-link> -->
         </a-menu-item>
       </a-menu>
